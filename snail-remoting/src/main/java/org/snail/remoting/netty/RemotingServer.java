@@ -1,7 +1,9 @@
 package org.snail.remoting.netty;
 
-import java.nio.channels.Channel;
+import io.netty.channel.Channel;
 import java.util.concurrent.ExecutorService;
+import org.snail.common.exception.remoting.RemotingSendRequestException;
+import org.snail.common.exception.remoting.RemotingTimeoutException;
 import org.snail.remoting.model.NettyChannelInactiveProcessor;
 import org.snail.remoting.model.NettyRequestProcessor;
 import org.snail.remoting.model.RemotingTransporter;
@@ -11,7 +13,7 @@ import org.snail.remoting.model.RemotingTransporter;
  */
 public interface RemotingServer extends BaseRemotingService{
 
-  RemotingTransporter invokeSync(final Channel channel, final RemotingTransporter request, final long timeoutMillis);
+  RemotingTransporter invokeSync(final Channel channel, final RemotingTransporter request, final long timeoutMillis)throws RemotingSendRequestException, RemotingTimeoutException, InterruptedException;
 
   void registerProcessor(final byte requestCode, final NettyRequestProcessor processor, final ExecutorService executorService);
 

@@ -69,4 +69,8 @@ public class RemotingResponse {
     this.transporter = transporter;
     countDownLatch.countDown();
   }
+
+  public void setSendRequestOk(boolean sendRequestOk) {
+    this.sendRequestOk = sendRequestOk;
+  }
 }

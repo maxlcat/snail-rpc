@@ -17,6 +17,10 @@ public class SnailProtocol {
 
     public static final byte COMPRESS = 82;
 
+    public static final byte HANDLER_ERROR = -1;
+
+    public static final byte HANDLER_BUSY = -2;
+
     private byte type;
 
     private byte sign;
