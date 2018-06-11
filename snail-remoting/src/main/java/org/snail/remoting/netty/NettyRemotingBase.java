@@ -3,11 +3,15 @@ package org.snail.remoting.netty;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.epoll.EpollEventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
 import javafx.util.Pair;
 import lombok.extern.slf4j.Slf4j;
 import org.snail.common.exception.remoting.RemotingSendRequestException;
 import org.snail.common.exception.remoting.RemotingTimeoutException;
 import org.snail.common.protocal.SnailProtocol;
+import org.snail.common.utils.NativeSupport;
 import org.snail.remoting.ConnectionUtils;
 import org.snail.remoting.RPCHook;
 import org.snail.remoting.model.NettyChannelInactiveProcessor;
@@ -163,6 +167,22 @@ public abstract class NettyRemotingBase {
             responseMap.remove(remotingTransporter.getOpaque());
         } else {
             log.warn("received response bu matched Id is removed from responseMap maybe timeout");
+        }
+    }
+
+    protected EventLoopGroup initEventLoopGroup(int works, ThreadFactory bossFactory) {
+        return isNativeET() ? new EpollEventLoopGroup(works, bossFactory) : new NioEventLoopGroup(works, bossFactory);
+    }
+
+    protected boolean isNativeET() {
+        return NativeSupport.isSupportNativeET();
+    }
+
+    protected  <T> void setIoRatio(T o, int ratio) {
+        if (o instanceof EpollEventLoopGroup) {
+            ((EpollEventLoopGroup) o).setIoRatio(ratio);
+        } else if (o instanceof NioEventLoopGroup) {
+            ((NioEventLoopGroup) o).setIoRatio(ratio);
         }
     }
 

@@ -206,21 +206,8 @@ public class NettyRemotingServer extends NettyRemotingBase implements RemotingSe
     this.rpcHook = rpcHook;
   }
 
-  private EventLoopGroup initEventLoopGroup(int works, ThreadFactory bossFactory) {
-    return isNativeET() ? new EpollEventLoopGroup(works, bossFactory) : new NioEventLoopGroup(works, bossFactory);
-  }
 
-  private boolean isNativeET() {
-    return NativeSupport.isSupportNativeET();
-  }
 
-  private <T> void setIoRatio(T o, int ratio) {
-    if (o instanceof EpollEventLoopGroup) {
-      ((EpollEventLoopGroup) o).setIoRatio(ratio);
-    } else if (o instanceof NioEventLoopGroup) {
-      ((NioEventLoopGroup) o).setIoRatio(ratio);
-    }
-  }
 
   @Override
   protected RPCHook getRPCHook() {
